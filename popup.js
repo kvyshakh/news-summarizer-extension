@@ -1,26 +1,29 @@
-var textapi = new AYLIENTextAPI({
-  application_id: aylien_api_id,
-  application_key: aylient_api_key
-});
-
 function getSummary(text) {
-	textapi.summarize({
-	  text: text,
-	  sentences_number: 5
-	}, function(error, response) {
-	  if (error === null) {
-	    response.sentences.forEach(function(s) {
-	      console.log(s);
-	    });
-	  }
-	});
+
+	var endpoint = 'summarize';
+	var jsonData;
+	
+	$.ajax({
+        url: 'http://api.aylien.com/api/v1/' + endpoint + '?text=' + encodeURIComponent(text) + '&title=NA',
+        async:false,
+        beforeSend: function(xhr) {
+             xhr.setRequestHeader("X-AYLIEN-TextAPI-Application-Key", aylien_api_key);
+             xhr.setRequestHeader("X-AYLIEN-TextAPI-Application-ID", aylien_api_id);
+        }, success: function(data){
+        	jsonData = data;
+        	//alert(jsonData);
+        }
+	})
+
+	return jsonData;
+
 }
 
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 	var activeTab = tabs[0];
-	console.log("S");
 	chrome.tabs.sendMessage(activeTab.id, {"message": "get_selected_text"}, function(response) {
-
-	})
-})
+		var apiResponse = getSummary(response.selected_text);
+		alert(apiResponse.sentences);
+	});
+});
 
