@@ -23,7 +23,21 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 	var activeTab = tabs[0];
 	chrome.tabs.sendMessage(activeTab.id, {"message": "get_selected_text"}, function(response) {
 		var apiResponse = getSummary(response.selected_text);
-		alert(apiResponse.sentences);
+		//alert(apiResponse.sentences);
+		var sentences = apiResponse.sentences;
+
+		var i;
+		console.log(sentences.length);
+		for (i = 0; i < sentences.length; i++) {
+			if (i % 2 == 0) {
+				document.getElementById("summary").innerHTML += "<tr style='background-color:#EAECEE'><td>" + sentences[i] + "</td></tr>";
+			}
+			else {
+				document.getElementById("summary").innerHTML += "<tr style='background-color:white'><td>" + sentences[i] + "</td></tr>";
+			}
+
+
+		}
 	});
 });
 
