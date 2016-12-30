@@ -1,0 +1,11 @@
+{
+  "manifest_version": 2,
+  "name": "News Summarizer",
+  "description": "A chrome extension that allows users to get a summary of a news article or large block of text.",
+  "version": "1.0",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html",
+    "default_title": "Summarize!"
+  }
+}
