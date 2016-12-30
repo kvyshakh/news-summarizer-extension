@@ -3,6 +3,14 @@
   "name": "News Summarizer",
   "description": "A chrome extension that allows users to get a summary of a news article or large block of text.",
   "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": ["content.js"]
+    }
+  ],
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html",
