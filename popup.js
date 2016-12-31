@@ -22,21 +22,30 @@ function getSummary(text) {
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 	var activeTab = tabs[0];
 	chrome.tabs.sendMessage(activeTab.id, {"message": "get_selected_text"}, function(response) {
-		var apiResponse = getSummary(response.selected_text);
-		//alert(apiResponse.sentences);
-		var sentences = apiResponse.sentences;
+		if (response.selected_text == "") {
+			document.body.innerHTML += "<h3 style='text-align: center'>No text selected! Select text and try again.</h3>";
+		}
+		else {
+			var apiResponse = getSummary(response.selected_text);
+			//alert(apiResponse.sentences);
+			var sentences = apiResponse.sentences;
 
-		var i;
-		console.log(sentences.length);
-		for (i = 0; i < sentences.length; i++) {
-			if (i % 2 == 0) {
-				document.getElementById("summary").innerHTML += "<tr style='background-color:#EAECEE'><td>" + sentences[i] + "</td></tr>";
+			if (sentences.length == 0) {
+				document.body.innerHTML += "<h3 style='text-align: center'>Not enough text selected to generate summary. Select larger block of text and try again.</h3>";
 			}
 			else {
-				document.getElementById("summary").innerHTML += "<tr style='background-color:white'><td>" + sentences[i] + "</td></tr>";
+				var i;
+				//console.log(sentences.length);
+				document.getElementById("summary").innerHTML += "<tr><th style='font-size: 16px;'>Summary</th></tr>";
+				for (i = 0; i < sentences.length; i++) {
+					if (i % 2 == 0) {
+						document.getElementById("summary").innerHTML += "<tr style='background-color:#EAECEE'><td>" + sentences[i] + "</td></tr>";
+					}
+					else {
+						document.getElementById("summary").innerHTML += "<tr style='background-color:white'><td>" + sentences[i] + "</td></tr>";
+					}
+				}
 			}
-
-
 		}
 	});
 });
